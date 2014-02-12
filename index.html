@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title></title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <style>
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-responsive.min.css"/>
+        <link rel="stylesheet" href="css/main.css"/>
+        <link rel="stylesheet" href="css/bootstrap-fileupload.min.css"/>
+        <link rel="stylesheet" href="css/prettify.css"/>
+        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js">//</script>
+        <script id="select-template" type="x-template">
+           <li><label><input type="checkbox" name="%id%"/>%name%</label></li>
+        </script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">MarkLogic Configuration Bootstrap</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li id="nav-home" class="active"><a href="#">Home</a></li>
+                            <li id="nav-export"><a href="#export">Export</a></li>
+                            <li id="nav-import"><a href="#import">Import</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="home">
+                <div class="hero-unit">
+                    <h2>MarkLogic 6 Configuration Bootstrap</h2>
+                    <p>MarkLogic Configuration Bootstrap allows user to import/export configurations from server and deploy configuration changes to your environment
+                    
+                    </p>
+                    <p><a id="home-export"  class="btn btn-primary btn-large">Export Configuration &raquo;</a></p>
+                    <p><a id="home-import"  class="btn btn-primary btn-large">Import Configuration &raquo;</a></p>
+                </div>
+            </div>
+           <div id="import" >
+                <div class="row">
+                    <div class="span4">
+                        <h3>Import Configuration</h3>
+                    </div>
+                </div>
+               <div id="rootwizard">
+                   <div id="import-progress" class="progress progress-striped active">
+                        <div class="bar"></div>
+                   </div>
+                   <div class="navbar">
+                       <div class="navbar-inner">
+                           <div class="container">
+                               <ul>
+                                   <li><a href="#import-upload" data-toggle="tab"><span class="nav-pill">1</span>Upload</a></li>
+                                   <li><a href="#import-confirm" data-toggle="tab"><span class="nav-pill">2</span>Confirm</a></li>
+                                   <li><a href="#import-complete" data-toggle="tab"><span class="nav-pill">3</span>Finish</a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="tab-content">
+                       <div class="tab-pane" id="import-upload">
+                           <div class="row">
+                              <div class="span12">
+                                 <h4>Upload Configuration</h4>
+                              </div>
+                           </div> 
+                           <div class="row">
+                               <div class="span6">
+                                   <form id="import-form" method="post" action="import2.xqy"  enctype="multipart/form-data">
+                                       <p>Choose configuration file to import</p>
+                                       <div class="fileupload fileupload-new" data-provides="fileupload">
+                                           <div class="input-append">
+                                               <div class="uneditable-input span3">
+                                                   <i class="icon-file fileupload-exists"></i> 
+                                                   <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span>
+                                                       <input id="config-file" type="file" name="configfile" size="100"/> 
+                                                   </span>
+                                               <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                           </div>
+                                       </div>
+                                       <!--<button id="upload-configuration" type="button" name="submit" value="Import" class="btn btn-primary">Import</button>-->
+                                   </form>
+                               </div>
+                               <div class="clearfix"></div>
+                           </div>  
+                           
+                       </div>
+                       <div class="tab-pane" id="import-confirm">
+                           <div class="row">
+                               <div class="span12">
+                                 <h4>Confirm Configuration Changes</h4>  
+                               </div>
+                           </div>
+                           <form id="import-config-form" method="post" action="/import-configuration.xqy">
+                               <div class="row">
+                                   <div class="span12">
+                                       <h4>Databases</h4>
+                                   </div>    
+                                   <table id="database-config" class="span10 table table-striped table-bordered table-condensed">
+                                       <thead>
+                                           <tr>
+                                               <th class="span2">Name</th>
+                                               <th class="span1"><input type="checkbox" class="check-all"/> Import</th>
+                                               <th class="span4">Database Name</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                           
+                                       </tbody>                                   
+                                   </table>
+                               </div>
+                               <div class="row">
+                                   <div class="span12">
+                                        <h4>Forests</h4>
+                                   </div>
+                                   <table id="forest-config" class="span10 table table-striped table-bordered table-condensed">
+                                       <thead>
+                                           <tr>
+                                               <th class="span3">Name</th>
+                                               <th class="span1"><input type="checkbox" class="check-all"/> Import</th>
+                                               <th class="span2">Forest Name</th>
+                                               <th class="span3">Data Directory</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                          
+                                       </tbody>                                   
+                                   </table>
+                               </div>
+                               <div class="row">
+                                    <div class="span12">
+                                         <h4>Servers</h4>
+                                    </div>
+                                    <table id="server-config" class="span10 table table-striped table-bordered table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th class="span2">Name</th>
+                                                <th class="span1"><input type="checkbox" class="check-all"/> Import</th>
+                                                <th class="span4">Role Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>          
+                                        </tbody>                                   
+                                    </table>
+                               </div><!--./server-config-->
+                               <div class="row">
+                                   <div class="span12">
+                                       <h4>Roles</h4>
+                                   </div>
+                                   <table id="role-config" class="span10 table table-striped table-bordered table-condensed">
+                                       <thead>
+                                           <tr>
+                                               <th class="span2">Role Name</th>
+                                               <th class="span1"><input type="checkbox" class="check-all"/> Import</th>
+                                               <th class="span4">Description</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                           
+                                       </tbody>                                   
+                                   </table>
+                               </div><!--./role-config-->
+                               <div class="row">
+                                   <div class="span12">
+                                       <h4>Users</h4>
+                                   </div>
+                                   <table id="user-config" class="span10 table table-striped table-bordered table-condensed">
+                                       <thead>
+                                           <tr>
+                                               <th class="span2">User Name</th>
+                                               <th class="span1"><input type="checkbox" class="check-all"/> Import</th>
+                                               <th class="span4">Description</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                           
+                                       </tbody>                                   
+                                   </table>
+                               </div><!--./user-config-->
+                           </form>
+                       </div><!--./import-confirm-->
+                       <div class="tab-pane" id="import-complete"> 
+                          <div class="row">
+                              <table id="import-results" class="span10 table table-striped table-bordered table-condensed">
+                                <thead> 
+                                    <tr>
+                                      <th class="span2">Result</th>
+                                      <th class="span8">Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody> </tbody>
+                            </table>
+                          </div><!--./import-complete-->                         
+                       </div>
+                       <ul class="pager wizard">
+                           <li class="previous"><a href="javascript:;">Previous</a></li>
+                           <li class="next"><a href="javascript:;">Next</a></li>
+                           <li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
+                       </ul>
+                   </div>	
+               </div>
+               
+           </div>           
+           <div id="export">
+               <form method="post" action="export.xqy" >
+                    <!-- Example row of columns -->
+                    <div class="row">
+                         <div class="span5">
+                             <h3>Export Configuration</h3> 
+                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="span4">
+                            <label for="filename">
+                                <button type="submit" class="btn btn-primary" name="submit" value="Export">Export</button>
+                                <input type="text" name="filename" value="config.xml"/></label>
+                        </div>
+                    </div>
+                   <div class="row">
+                        <div class="span2">
+                            <h4>Databases</h4>
+                            <hr/>   
+                            <ul id="databases" class="nav nav-list"> </ul>
+                        </div>
+                        <div class="span2">
+                            <h4>Forests</h4>
+                            <hr/> 
+                            <ul id="forests" class="nav nav-list"> </ul>
+                       </div>
+                        <div class="span2">
+                            <h4>App Servers</h4>
+                            <hr/> 
+                            <ul id="servers" class="nav nav-list" > </ul>
+                        </div>
+                        <div class="span2">
+                            <h4>Roles</h4>
+                            <hr/> 
+                            <ul id="roles" class="nav nav-list"></ul>
+                        </div>
+                        <div class="span2">
+                            <h4>Users</h4>
+                            <hr/> 
+                            <ul id="users" class="nav nav-list"></ul>
+                        </div>
+                        <!--<div class="span2">
+                            <h4>Mime Types</h4>
+                            <hr/> 
+                            <ul id="mimetypes"></ul>
+                        </div>-->
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="row">
+                        <div class="span2">
+                            <button type="submit" class="btn btn-primary" name="submit" value="Export">Export</button>
+                        </div>
+                    </div>
+               </form>
+            </div>
+           <hr>
+            <footer>
+                <p>&copy;MarkLogic Corporation 2013</p>
+            </footer>
+
+        </div> <!-- /container -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">   </script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/vendor/bootstrap-fileupload.min.js"></script>
+        <script src="js/vendor/prettify.js"></script>
+        <script src="js/vendor/jquery.bootstrap.wizard.min.js"></script>
+        <script src="js/vendor/jquery.blockui.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
